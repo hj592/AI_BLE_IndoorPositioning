@@ -1,7 +1,9 @@
 package com.example.bleLocationSystem.model;
 
+import java.util.ArrayList;
+
 public class Predictor {
-    public native float predictDistance(float[] rssiValues);
+    public native float predictDistance(ArrayList<Double> rssiValues);
 
     static {
         System.load("C:\\Users\\heejin\\Documents\\libtorch-win-shared-with-deps-2.4.1+cpu\\libtorch\\lib\\c10.dll");

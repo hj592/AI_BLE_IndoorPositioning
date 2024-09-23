@@ -2,6 +2,7 @@ package com.example.bleLocationSystem.service;
 
 import com.example.bleLocationSystem.ChartUI;
 import com.example.bleLocationSystem.model.KalmanFilter;
+import com.example.bleLocationSystem.model.Predictor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,19 +14,21 @@ public class ChartTestService {
     KalmanFilter kFilterForAp1;
     private double tempAlpha;
     private double lossNum;
-
+    Predictor predictor;
     ArrayList<Double> kalman_data;
 
     double ori_mean;
     double kalman_mean;
     double ori_mean_meter;
     double kalman_mean_meter;
+    double ai_meter;
 
     public ChartTestService() {
         this.chartUI = ChartUI.getInstance(); // 싱글턴 인스턴스
         this.chartUI.setVisible(true);
         kFilterForAp1 = new KalmanFilter();
         kalman_data = new ArrayList<Double>();
+        predictor = new Predictor();
     }
 
     public void processData(ArrayList<Double> rssiData) {
@@ -45,9 +48,10 @@ public class ChartTestService {
         kalman_mean_meter = calcDistance(kalman_mean);
 
         //딥러닝으로 10개로 추론 후 meter 구하기
+        ai_meter = predictor.predictDistance(rssiData);
 
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , 3.0);
+        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
 
         kalman_data.clear();
     }
