@@ -48,14 +48,13 @@ public class ChartTestService {
         kalman_mean_meter = calcDistance(kalman_mean);
 
         //딥러닝으로 10개로 추론 후 meter 구하기
-//        ai_meter = predictor.predictDistance(rssiData);
-
-        float[] rssiValues = {-57.0f, -38.0f, -52.0f, -51.0f, -71.0f, -71.0f, -54.0f, -61.0f, -51.0f, -71.0f};
-
-        float test_distance = predictor.predictDistance(rssiValues);
-
+        double[] a = rssiData.stream()
+                .mapToDouble(Double::doubleValue)
+                .toArray();
+        ai_meter = predictor.predictDistance(a);
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , test_distance);
+        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
+
 
         kalman_data.clear();
     }
