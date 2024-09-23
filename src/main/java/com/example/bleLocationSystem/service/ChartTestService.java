@@ -53,7 +53,7 @@ public class ChartTestService {
                 .toArray();
         ai_meter = predictor.predictDistance(a);
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
+        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter, ai_meter, ai_meter);
 
 
         kalman_data.clear();

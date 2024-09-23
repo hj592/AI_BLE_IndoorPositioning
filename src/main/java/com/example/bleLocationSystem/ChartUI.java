@@ -24,7 +24,10 @@ public class ChartUI extends JFrame {
     private static ChartUI instance;
     private XYSeries original;
     private XYSeries kalman;
-    private XYSeries ours;
+//    private XYSeries ours;
+    private XYSeries cnn_lstm_ours;
+    private XYSeries weighted_cnn_lstm_ours;
+    private XYSeries ground_truth;
     private int time = 0;
 
     public ChartUI(String title) { //double w, double h,
@@ -35,12 +38,16 @@ public class ChartUI extends JFrame {
         setLocationRelativeTo(null); // 중앙에 위치
         original = new XYSeries("original");
         kalman = new XYSeries("kalman");
-        ours = new XYSeries("ours");
+        cnn_lstm_ours= new XYSeries("cnn-lstm(ours)");
+        weighted_cnn_lstm_ours= new XYSeries("weighted cnn-lstm(ours)");
+        ground_truth= new XYSeries("ground truth");
 
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(original);
         dataset.addSeries(kalman);
-        dataset.addSeries(ours);
+        dataset.addSeries(cnn_lstm_ours);
+        dataset.addSeries(weighted_cnn_lstm_ours);
+        dataset.addSeries(ground_truth);
 
         // 차트 생성
         JFreeChart chart = ChartFactory.createXYLineChart(
@@ -63,9 +70,11 @@ public class ChartUI extends JFrame {
         chart.getLegend().setItemFont(new Font("SansSerif", Font.PLAIN, 20)); // 범례 글자 크기
         // 선 굵기
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f)); // raw
-        renderer.setSeriesStroke(1, new BasicStroke(2.0f)); // 칼만
-        renderer.setSeriesStroke(2, new BasicStroke(2.0f)); // 딥러닝
+        renderer.setSeriesStroke(0, new BasicStroke(4.0f)); // raw
+        renderer.setSeriesStroke(1, new BasicStroke(4.0f)); // 칼만
+        renderer.setSeriesStroke(2, new BasicStroke(6.0f)); // 딥러닝
+        renderer.setSeriesStroke(3, new BasicStroke(6.0f)); // weighted
+        renderer.setSeriesStroke(4, new BasicStroke(4.0f)); // gt
 
         plot.setRenderer(renderer);
 
@@ -82,10 +91,12 @@ public class ChartUI extends JFrame {
         return instance;
     }
     // 실시간 데이터 추가
-    public void addNewDataPoint(double value1, double value2, double value3) {
+    public void addNewDataPoint(double value1, double value2, double value3, double value4, double gt) {
         original.add(time, value1);
         kalman.add(time, value2);
-        ours.add(time, value3);
+        cnn_lstm_ours.add(time, value3);
+        weighted_cnn_lstm_ours.add(time,value4);
+        ground_truth.add(time,gt);
         time++;
         repaint();
     }
