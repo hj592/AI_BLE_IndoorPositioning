@@ -22,6 +22,7 @@ public class ChartTestService {
     double ori_mean_meter;
     double kalman_mean_meter;
     double ai_meter;
+    double weighted_ai_meter;
 
     public ChartTestService() {
         this.chartUI = ChartUI.getInstance(); // 싱글턴 인스턴스
@@ -52,11 +53,19 @@ public class ChartTestService {
                 .mapToDouble(Double::doubleValue)
                 .toArray();
         ai_meter = predictor.predictDistance(a);
+
+        weighted_ai_meter = calcWeighted(ori_mean_meter, ai_meter);
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
+        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter, ai_meter);
 
 
         kalman_data.clear();
+    }
+
+    public double calcWeighted(double ori_avg_meter, double ai_meter) {
+        double w = 0.5;
+
+        return (ori_avg_meter*(1.0-w)) + (ai_meter*w);
     }
 
     public double calcMean(ArrayList<Double> rssiData) {
