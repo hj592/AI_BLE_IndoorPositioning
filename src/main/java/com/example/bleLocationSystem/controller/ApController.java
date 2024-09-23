@@ -20,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @Slf4j //로깅 어노테이션
@@ -117,7 +114,7 @@ public class ApController {
 
         if(rssiData != null) {
             System.out.println("in");
-            chartTestService.processData(rssiData.get(0),rssiData.get(1),rssiData.get(2));
+            chartTestService.processData(rssiData);
         }
         return (ul != null) ?
                 ResponseEntity.ok(rssiData.toString()) :
