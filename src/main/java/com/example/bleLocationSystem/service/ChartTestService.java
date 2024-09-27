@@ -19,9 +19,11 @@ public class ChartTestService {
 
     double ori_mean;
     double kalman_mean;
+    double ori_last_meter;
     double ori_mean_meter;
     double kalman_mean_meter;
     double ai_meter;
+    double weighted_ai_meter;
 
     public ChartTestService() {
 //        this.chartUI = ChartUI.getInstance(); // 싱글턴 인스턴스
@@ -37,6 +39,8 @@ public class ChartTestService {
 
         ori_mean_meter = calcDistance(ori_mean);
 
+        ori_last_meter = calcDistance(rssiData.get(rssiData.size()-1));
+
         for(int i=0; i<rssiData.size(); i++) {
             double filterdRssi1 = kFilterForAp1.kalmanFiltering(rssiData.get(i));
 
@@ -51,15 +55,29 @@ public class ChartTestService {
         double[] a = rssiData.stream()
                 .mapToDouble(Double::doubleValue)
                 .toArray();
+//<<<<<<< HEAD
 //        ai_meter = predictor.predictDistance(a);
-        System.out.println("ai_meter");
+//        System.out.println("ai_meter");
         ai_meter = 0;
-        System.out.println(ai_meter);
+//        System.out.println(ai_meter);
         // 데이터 처리하고 GUI 즉시 업데이트
 //        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
+//        ai_meter = predictor.predictDistance(a);
 
+        weighted_ai_meter = calcWeighted(ori_mean_meter, ai_meter);
+        // 데이터 처리하고 GUI 즉시 업데이트
+        //chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter, ai_meter);
+
+
+//        chartUI.addNewDataPoint(ori_last_meter, kalman_mean_meter , ai_meter, weighted_ai_meter, 7);
 
         kalman_data.clear();
+    }
+
+    public double calcWeighted(double ori_avg_meter, double ai_meter) {
+        double w = 0.7;
+
+        return (ori_avg_meter*(1.0-w)) + (ai_meter*w);
     }
 
     public double calcMean(ArrayList<Double> rssiData) {
