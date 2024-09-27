@@ -267,7 +267,7 @@ public class UI extends JFrame {
 
 
 
-            log.info("x={} y={}",x, y);
+//            log.info("x={} y={}",x, y);
 
             if(x!=-1 && y!=-1) {
 

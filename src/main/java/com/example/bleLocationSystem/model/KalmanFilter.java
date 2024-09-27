@@ -30,7 +30,7 @@ public class KalmanFilter {
         predictedRssi = 0;
         errorCovariance = 0;
 
-        log.info("predictedRssi = {}, errorConvariance = {}", predictedRssi, errorCovariance);
+//        log.info("predictedRssi = {}, errorConvariance = {}", predictedRssi, errorCovariance);
     }
 
 //    public KalmanFilter(double processNoise, double measurementNoise) {

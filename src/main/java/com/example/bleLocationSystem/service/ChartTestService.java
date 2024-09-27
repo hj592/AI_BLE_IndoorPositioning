@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @Service
 public class ChartTestService {
 
-    private final ChartUI chartUI;
+//    private final ChartUI chartUI;
     KalmanFilter kFilterForAp1;
     private double tempAlpha;
     private double lossNum;
@@ -24,11 +24,11 @@ public class ChartTestService {
     double ai_meter;
 
     public ChartTestService() {
-        this.chartUI = ChartUI.getInstance(); // 싱글턴 인스턴스
-        this.chartUI.setVisible(true);
+//        this.chartUI = ChartUI.getInstance(); // 싱글턴 인스턴스
+//        this.chartUI.setVisible(true);
         kFilterForAp1 = new KalmanFilter();
         kalman_data = new ArrayList<Double>();
-        predictor = new LibtorchPredictor();
+//        predictor = new LibtorchPredictor();
     }
 
     public void processData(ArrayList<Double> rssiData) {
@@ -51,9 +51,12 @@ public class ChartTestService {
         double[] a = rssiData.stream()
                 .mapToDouble(Double::doubleValue)
                 .toArray();
-        ai_meter = predictor.predictDistance(a);
+//        ai_meter = predictor.predictDistance(a);
+        System.out.println("ai_meter");
+        ai_meter = 0;
+        System.out.println(ai_meter);
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
+//        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter , ai_meter);
 
 
         kalman_data.clear();

@@ -4,10 +4,7 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import com.example.bleLocationSystem.LocFilterTestUI;
 import com.example.bleLocationSystem.TestUI;
 import com.example.bleLocationSystem.UI;
-import com.example.bleLocationSystem.model.CO;
-import com.example.bleLocationSystem.model.JSONVO;
-import com.example.bleLocationSystem.model.UserLocation;
-import com.example.bleLocationSystem.model.VO;
+import com.example.bleLocationSystem.model.*;
 import com.example.bleLocationSystem.originalTestUI;
 import com.example.bleLocationSystem.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +25,17 @@ public class ApController {
     // Real Real Real
     PositioningService positioningService = new PositioningService();
 
+    AIPositioningService aiPositioningService = new AIPositioningService();
+
     //실제
 //    ApService apService = new ApService();
-    UI ui = new UI(positioningService.getW(),positioningService.getH());
+    UI ui = new UI(aiPositioningService.getW(),aiPositioningService.getH());
     UserLocation ul;
     Map<String, Double> map = new HashMap<String, Double>();
 
     VO vo;
 
-    CO co;
+    CO co = new CO();
 
     boolean coDangerTmp;
 
@@ -99,11 +98,62 @@ public class ApController {
 //    @PostMapping("/api/distance")
 //    public ResponseEntity<VO> receiveDistance(VO vo) throws Exception {
 
-    @Autowired
-    private PredictionTestService predictionTestService;
+//    @Autowired
+//    private PredictionTestService predictionTestService;
 
-    @Autowired
-    private ChartTestService chartTestService;
+//    @Autowired
+//    private ChartTestService chartTestService;
+
+    int count=0;
+
+    //실제 사용
+    @PostMapping("/api/positioning")
+    public ResponseEntity<Map<String, Double>> receiveVo(@RequestBody PositionVO positionVO) throws Exception {
+        count = count + 1;
+        System.out.println("---------------------------------------- Start ----------------------------------------");
+//        System.out.println("");
+        System.out.println("count = "+count);
+        System.out.println(positionVO);
+        Map<String, Double> rep_map = new HashMap<String, Double>();
+
+        ul = aiPositioningService.trilateration(positionVO);
+        log.info("x = {}, y = {}", ul.getX(), ul.getY());
+
+        co.setCOValue(positionVO.getCo());
+
+        coDangerTmp = co.checkDanger();
+
+        if (coDangerTmp == true) {
+            coDangerTmpFloat = 1.0;
+        }
+        if (count == 15) {
+            coDangerTmpFloat = 1.0;
+        }
+        log.info("coDanger float = {}", coDangerTmpFloat);
+        if (ul != null) {
+            ui.setUserLocation(ul);
+            rep_map.put("triangleNum", positioningService.getKalmanTriangleNum() * 1.0);
+            rep_map.put("x", ul.getX());
+            rep_map.put("y", ul.getY());
+            rep_map.put("coDanger", coDangerTmpFloat);
+        } else {
+            rep_map.put("triangleNum", -1.0);
+            rep_map.put("x", -1.0);
+            rep_map.put("y", -1.0);
+            rep_map.put("coDanger", coDangerTmpFloat);
+        }
+
+
+//        if (ul != null) {
+//            return ResponseEntity.status(HttpStatus.OK).body(map);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.OK).body(map);
+//        }
+
+        return (ul != null) ?
+                ResponseEntity.status(HttpStatus.OK).body(rep_map) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 
     @PostMapping("/predict")
     public ResponseEntity<String> predictDistance(@RequestBody ArrayList<Double> rssiData) {
@@ -114,7 +164,7 @@ public class ApController {
 
         if(rssiData != null) {
             System.out.println("in");
-            chartTestService.processData(rssiData);
+//            chartTestService.processData(rssiData);
         }
         return (ul != null) ?
                 ResponseEntity.ok(rssiData.toString()) :
@@ -127,7 +177,7 @@ public class ApController {
 //    @PostMapping("/api/distance")
 //    public ResponseEntity<Map<String, Double>> receiveDistance(@RequestBody VO vo) throws Exception {
 
-    //실제 사용? (CO 포함 JSON 받을때)
+    //이전버전 실제 사용 (CO 포함 JSON 받을때)
     @PostMapping("/api/distance")
     public ResponseEntity<Map<String, Double>> receiveDistance(@RequestBody JSONVO jsonVo) throws Exception {
         vo.setDeviceName(jsonVo.getDeviceName());
@@ -164,11 +214,11 @@ public class ApController {
         }
 
         //-------------Real Real Real--------------
-        System.out.println("1 : "+vo.getRssi1() + "| 2 : "+vo.getRssi2() + "| 3 : "+vo.getRssi3() + "| 4 : "+vo.getRssi4() + "| 5 : "+vo.getRssi5() + "| 6 : "+vo.getRssi6() + "| 7 : "+vo.getRssi7() + "| 8 : "+vo.getRssi8());
+        System.out.println("1 : " + vo.getRssi1() + "| 2 : " + vo.getRssi2() + "| 3 : " + vo.getRssi3() + "| 4 : " + vo.getRssi4() + "| 5 : " + vo.getRssi5() + "| 6 : " + vo.getRssi6() + "| 7 : " + vo.getRssi7() + "| 8 : " + vo.getRssi8());
 //        ul = positioningService.trilateration(vo);
-        if(ul != null) {
+        if (ul != null) {
 //            ui.setUserLocation(ul);
-            map.put("triangleNum", positioningService.getKalmanTriangleNum()*1.0);
+            map.put("triangleNum", positioningService.getKalmanTriangleNum() * 1.0);
             map.put("x", ul.getX());
             map.put("y", ul.getY());
             map.put("coDanger", coDangerTmpFloat);
@@ -177,6 +227,7 @@ public class ApController {
         return (ul != null) ?
                 ResponseEntity.status(HttpStatus.OK).body(map) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 
 
 
@@ -297,5 +348,5 @@ public class ApController {
 //            ui.setUserLocation(ulList);
 //        }
 
-    }
+//    }
 }
