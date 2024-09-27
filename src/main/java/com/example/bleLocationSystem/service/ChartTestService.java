@@ -19,6 +19,7 @@ public class ChartTestService {
 
     double ori_mean;
     double kalman_mean;
+    double ori_last_meter;
     double ori_mean_meter;
     double kalman_mean_meter;
     double ai_meter;
@@ -38,6 +39,8 @@ public class ChartTestService {
 
         ori_mean_meter = calcDistance(ori_mean);
 
+        ori_last_meter = calcDistance(rssiData.get(rssiData.size()-1));
+
         for(int i=0; i<rssiData.size(); i++) {
             double filterdRssi1 = kFilterForAp1.kalmanFiltering(rssiData.get(i));
 
@@ -56,14 +59,16 @@ public class ChartTestService {
 
         weighted_ai_meter = calcWeighted(ori_mean_meter, ai_meter);
         // 데이터 처리하고 GUI 즉시 업데이트
-        chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter, ai_meter);
+        //chartUI.addNewDataPoint(ori_mean_meter, kalman_mean_meter, ai_meter);
 
+
+        chartUI.addNewDataPoint(ori_last_meter, kalman_mean_meter , ai_meter, weighted_ai_meter, 7);
 
         kalman_data.clear();
     }
 
     public double calcWeighted(double ori_avg_meter, double ai_meter) {
-        double w = 0.5;
+        double w = 0.7;
 
         return (ori_avg_meter*(1.0-w)) + (ai_meter*w);
     }

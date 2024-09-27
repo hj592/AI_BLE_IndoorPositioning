@@ -61,6 +61,6 @@ public class LibtorchPredictor {
 
         //System.loadLibrary("lstmcnnTest");  // DLL 이름
 //        System.load("C:\\Users\\JaeHyuk\\Desktop\\LibtorchPredictor\\lstmcnnTest.dll");  // DLL 이름
-        System.load("C:\\Users\\heehe\\Desktop\\AIchallenge\\jjin\\lstmcnnTest.dll");  // DLL 이름
+        System.load("C:\\Users\\heehe\\Desktop\\ICTchallenge\\jjin\\lstmcnnTest.dll");  // DLL 이름
     }
 }
