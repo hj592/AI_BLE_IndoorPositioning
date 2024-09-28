@@ -1112,11 +1112,11 @@ public class ThresTestService {
 
     //Threshold 실험 엑셀 파일 만들기
     public void createCsvEx2(UserLocation originalUl, UserLocation updateLocFilteredUlfor1m, UserLocation updateLocFilteredUlfor2m, UserLocation updateLocFilteredUlfor3m, UserLocation updateLocFilteredUlfor4m) {
-        try {
-            poiHelper.writeExcelforLocFilter(originalUl, updateLocFilteredUlfor1m, updateLocFilteredUlfor2m, updateLocFilteredUlfor3m, updateLocFilteredUlfor4m);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            poiHelper.writeExcelforLocFilter(originalUl, updateLocFilteredUlfor1m, updateLocFilteredUlfor2m, updateLocFilteredUlfor3m, updateLocFilteredUlfor4m);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

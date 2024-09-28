@@ -865,12 +865,12 @@ public class LocFiterTestService {
 
     //실험 2 엑셀 파일 만들기
     public void createCsvEx2(UserLocation originalUl, UserLocation kalmanUl, UserLocation mAFilteredUlforNotProximity, UserLocation proposedWithoutProximity ,UserLocation proposedUl) {
-        try {
-            poiHelper.writeExcelforLocFilter(originalUl, kalmanUl, mAFilteredUlforNotProximity, proposedWithoutProximity, proposedUl);
+//        try {
+//            poiHelper.writeExcelforLocFilter(originalUl, kalmanUl, mAFilteredUlforNotProximity, proposedWithoutProximity, proposedUl);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 

@@ -26,6 +26,7 @@ public class ApController {
     PositioningService positioningService = new PositioningService();
 
     AIPositioningService aiPositioningService = new AIPositioningService();
+    AITestService aiTestService = new AITestService();
 
     //실제
 //    ApService apService = new ApService();
@@ -116,7 +117,10 @@ public class ApController {
         System.out.println(positionVO);
         Map<String, Double> rep_map = new HashMap<String, Double>();
 
+        //Real (AI positioning)
         ul = aiPositioningService.trilateration(positionVO);
+        // 측위 정확도 exel 뽑을때
+//        ul = aiTestService.trilateration(positionVO);
 
         co.setCOValue(positionVO.getCo());
         coDangerTmp = co.checkDanger();

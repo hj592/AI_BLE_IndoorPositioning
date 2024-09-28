@@ -15,10 +15,16 @@ public class UserLocation {
     //측정된 위치
     private double x;
     private double y;
-    //실제 위치
+    //실제 위치 (list = 1, 2, 5, 8, 10, 12, 14, 15, 18, 19)
+
+    //list
+    // side = 1, 2, 5, 8
+    // center = 10, 12, 14
+    // others = 15, 18, 19
+
     //1
-//    private double realLocX = 1;
-//    private double realLocY = 1;
+    private double realLocX = 1;
+    private double realLocY = 1;
 
     //2
 //    private double realLocX = 7.5;
@@ -93,8 +99,8 @@ public class UserLocation {
 //    private double realLocY = 3;
 
     //20
-    private double realLocX = 48.5;
-    private double realLocY = 10;
+//    private double realLocX = 48.5;
+//    private double realLocY = 10;
 
 
     //worst
