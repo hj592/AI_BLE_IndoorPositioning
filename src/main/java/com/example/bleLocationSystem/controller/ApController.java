@@ -109,7 +109,7 @@ public class ApController {
     //실제 사용
     @PostMapping("/api/positioning")
     public ResponseEntity<Map<String, Double>> receiveVo(@RequestBody PositionVO positionVO) throws Exception {
-        count = count + 1;
+//        count = count + 1;
         System.out.println("---------------------------------------- Start ----------------------------------------");
 //        System.out.println("");
         System.out.println("count = "+count);
@@ -117,21 +117,23 @@ public class ApController {
         Map<String, Double> rep_map = new HashMap<String, Double>();
 
         ul = aiPositioningService.trilateration(positionVO);
-        log.info("x = {}, y = {}", ul.getX(), ul.getY());
 
         co.setCOValue(positionVO.getCo());
-
         coDangerTmp = co.checkDanger();
-
         if (coDangerTmp == true) {
             coDangerTmpFloat = 1.0;
         }
-        if (count == 15) {
-            coDangerTmpFloat = 1.0;
-        }
-        log.info("coDanger float = {}", coDangerTmpFloat);
+
+        // ---------- co 발생 test용 코드 ----------
+//        if (count == 15) {
+//            coDangerTmpFloat = 1.0;
+//        }
+        // ----------------------------------------
+
+//        log.info("coDanger float = {}", coDangerTmpFloat);
         if (ul != null) {
             ui.setUserLocation(ul);
+            log.info("x = {}, y = {}", ul.getX(), ul.getY());
             rep_map.put("triangleNum", positioningService.getKalmanTriangleNum() * 1.0);
             rep_map.put("x", ul.getX());
             rep_map.put("y", ul.getY());

@@ -31,13 +31,13 @@ public class AIPositioningService {
     UserLocation aiOriUl;
     LocMAFilter locMAFilter;
     RemoveOutlier rm;
+    LibtorchPredictor predictor;
 
     public AIPositioningService() {
         mac = new MAC();
         locMAFilter = new LocMAFilter();
         rm = new RemoveOutlier();
-//        distanceVO = new DistanceVO();
-//        System.out.println(mac.getMac_addr_idx_dict());
+        predictor = new LibtorchPredictor();
     }
 
     public UserLocation trilateration(PositionVO positionVO) {
@@ -48,7 +48,12 @@ public class AIPositioningService {
         }
         proxiCheckNum = 0;
         // -------------------- 수정 필요 (AI 적용) --------------------
-        aiDistance = 2.0; //ex) prediction.predAiDistance(positionVO.getRssi())  -> AI 예측 코드 들어갈 자리
+
+        double[] a = positionVO.getRssi().stream()
+                .mapToDouble(Double::doubleValue)
+                .toArray();
+        aiDistance = predictor.predictDistance(a);
+//        aiDistance = 2.0; //ex) prediction.predAiDistance(positionVO.getRssi())  -> AI 예측 코드 들어갈 자리
         // -----------------------------------------------------------
         int mac_idx = mac.getMac_addr_idx_dict().get(positionVO.getMac());
 //        System.out.println(mac_idx);
