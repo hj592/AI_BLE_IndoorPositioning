@@ -1,6 +1,6 @@
-# AI_BLE_Location_Positioning
+# AI_BLE_Indoor_Positioning
 
-**AI BLE Location Positioning** is a system that enhances BLE signal positioning accuracy by converting RSSI values into distances. The system collects RSSI data through embedded devices, transmits it to a server, and utilizes AI models to analyze the signal and convert it to distance to perform accurate location estimation.
+**AI BLE Indoor Positioning** is a system that enhances BLE signal positioning accuracy by converting RSSI values into distances. The system collects RSSI data through embedded devices, transmits it to a server, and utilizes AI models to analyze the signal and convert it to distance to perform accurate location estimation.
 
 ## Published Paper
 > <a href="https://doi.org/10.3390/electronics13224518">**Indoor Positioning Method by CNN-LSTM of Continuous Received Signal Strength Indicator**</a>
